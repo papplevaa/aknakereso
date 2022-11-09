@@ -1,1 +1,55 @@
+#include "jatekmenet.h"
+#include "megjelenites.h"
 
+#include "debugmalloc.h"
+
+void sdl_init(int szeles, int magas, SDL_Window **pwindow, SDL_Renderer **prenderer) {
+    if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
+        SDL_Log("Nem indithato az SDL: %s", SDL_GetError());
+        exit(1);
+    }
+    SDL_Window *window = SDL_CreateWindow("Aknakereso", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, szeles, magas, 0);
+    if (window == NULL) {
+        SDL_Log("Nem hozhato letre az ablak: %s", SDL_GetError());
+        exit(1);
+    }
+    SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
+    if (renderer == NULL) {
+        SDL_Log("Nem hozhato letre a megjelenito: %s", SDL_GetError());
+        exit(1);
+    }
+    SDL_RenderClear(renderer);
+
+    *pwindow = window;
+    *prenderer = renderer;
+}
+
+void mezo_rajzol(SDL_Renderer *renderer, SDL_Texture *mezok, Mezo melyik, int x, int y) {
+    /* a forras kepbol ezekrol a koordinatakrol, ilyen meretu reszletet masolunk. */
+    SDL_Rect src = { (melyik % 4) * MERET, (melyik / 4) * MERET, MERET, MERET };
+    /* a cel kepre, ezekre a koordinatakra masoljuk */
+    SDL_Rect dest = { x, y, MERET, MERET };
+    /* kepreszlet masolasa */
+    SDL_RenderCopy(renderer, mezok, &src, &dest);
+}
+
+void tabla_rajzol(SDL_Renderer *renderer, SDL_Texture *mezok, Jatek *jatek){
+    for(int y = 0; y < jatek->mag; ++y){
+        for(int x = 0; x < jatek->szel; ++x){
+            Mezo melyik;
+            if(jatek->palya[y][x].lathato){
+                if(jatek->palya[y][x].akna)
+                    melyik = 12;
+                else
+                    melyik = jatek->palya[y][x].ertek;
+
+            } else if(jatek->palya[y][x].jelolt){
+                melyik = 10;
+            } else {
+                melyik = 9;
+            }
+            mezo_rajzol(renderer, mezok, melyik, x * MERET, y * MERET);
+        }
+    }
+    SDL_RenderPresent(renderer);
+}

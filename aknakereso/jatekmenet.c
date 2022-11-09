@@ -2,6 +2,8 @@
 #include<time.h>
 #include "jatekmenet.h"
 
+#include "debugmalloc.h"
+
 /** Ellenorzi a lepes szabalyossagat */
 static bool szabalyos(Jatek *pj, int x, int y){
     if(x < 0 || x >= pj->szel || y < 0 || y >= pj->mag)
@@ -83,10 +85,15 @@ void felderit(Jatek *pj, int x, int y){
     if(szabalyos(pj, x, y)){
         if(pj->palya[y][x].ertek == 0 && !pj->palya[y][x].lathato){
             pj->palya[y][x].lathato = true;
+            /*MINDENKEPPEN AT KELL IRNI*/
+            felderit(pj, x-1, y-1);
             felderit(pj, x, y-1);
-            felderit(pj, x+1, y);
-            felderit(pj, x, y+1);
+            felderit(pj, x+1, y-1);
             felderit(pj, x-1, y);
+            felderit(pj, x+1, y);
+            felderit(pj, x-1, y+1);
+            felderit(pj, x, y+1);
+            felderit(pj, x+1, y+1);
         } else {
             pj->palya[y][x].lathato = true;
         }
