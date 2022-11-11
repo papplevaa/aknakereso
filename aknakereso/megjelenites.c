@@ -1,5 +1,4 @@
-#include "jatekmenet.h"
-#include "megjelenites.h"
+#include "aknakereso.h"
 
 #include "debugmalloc.h"
 
@@ -8,7 +7,7 @@ void sdl_init(int szeles, int magas, SDL_Window **pwindow, SDL_Renderer **prende
         SDL_Log("Nem indithato az SDL: %s", SDL_GetError());
         exit(1);
     }
-    SDL_Window *window = SDL_CreateWindow("Aknakereso", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, szeles, magas, 0);
+    SDL_Window *window = SDL_CreateWindow("Aknakereső", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, szeles, magas, 0);
     if (window == NULL) {
         SDL_Log("Nem hozhato letre az ablak: %s", SDL_GetError());
         exit(1);

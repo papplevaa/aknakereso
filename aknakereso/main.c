@@ -1,5 +1,4 @@
-﻿#include "jatekmenet.h"
-#include "megjelenites.h"
+﻿#include "aknakereso.h"
 
 #include "debugmalloc.h"
 
@@ -28,6 +27,8 @@ int main(int argc, char *argv[]){
 
     /* kep betoltese */
     SDL_Texture *mezok = IMG_LoadTexture(renderer, "img/texture.png");
+    //SDL_Surface *icon = IMG_Load("img/icon.jpg");
+    //SDL_SetWindowIcon(window, icon);
     if(mezok == NULL){
         SDL_Log("Nem nyithato meg a kepfajl: %s", IMG_GetError());
         exit(1);
@@ -76,6 +77,7 @@ int main(int argc, char *argv[]){
 
     /* felszabaditjuk a memoriat */
     SDL_DestroyTexture(mezok);
+
 
     /* SDL vege */
     SDL_Quit();

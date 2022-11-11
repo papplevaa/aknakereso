@@ -1,14 +1,10 @@
-#include<stdlib.h>
-#include<time.h>
-#include "jatekmenet.h"
+#include "aknakereso.h"
 
 #include "debugmalloc.h"
 
-/** Ellenorzi a lepes szabalyossagat */
+// lepes szabalyossagat ellenorzi
 static bool szabalyos(Jatek *pj, int x, int y){
-    if(x < 0 || x >= pj->szel || y < 0 || y >= pj->mag)
-        return false;
-    return true;
+    return !(x < 0 || x >= pj->szel || y < 0 || y >= pj->mag);
 }
 
 /** Memoriat foglal a jatekmenethez (Jatek struct) */
@@ -27,7 +23,6 @@ static bool foglal(Jatek *pj){
     /** VALAHOGY EZT KELL ELLENORIZNI? */
     for(int y = 1; y < pj->mag; ++y)
         pj->palya[y] = pj->palya[0] + y * pj->szel;
-
     return true;
 }
 
@@ -55,6 +50,7 @@ static void inicializal(Jatek *pj){
         pj->palya[y][x].akna = true;
         i++;
     }
+
 
     // szamok
     for(int y = 0; y < pj->mag; ++y){
@@ -100,7 +96,7 @@ void felderit(Jatek *pj, int x, int y){
     }
 }
 
-/** Mezo megjelolese zaszloval */
+/* Mezo megjelolese zaszloval */
 void jelol(Jatek *pj, int x, int y){
     if(szabalyos(pj, x, y)){
         pj->palya[y][x].jelolt = !pj->palya[y][x].jelolt;
