@@ -46,6 +46,7 @@
 			<Add library="dxguid" />
 			<Add directory="$(#sdl2.lib)" />
 		</Linker>
+		<Unit filename="aknakereso.h" />
 		<Unit filename="jatekmenet.c">
 			<Option compilerVar="CC" />
 		</Unit>

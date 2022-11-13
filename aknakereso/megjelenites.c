@@ -24,15 +24,14 @@ void sdl_init(int szeles, int magas, SDL_Window **pwindow, SDL_Renderer **prende
 }
 
 void mezo_rajzol(SDL_Renderer *renderer, SDL_Texture *mezok, Mezo melyik, int x, int y) {
-    /* a forras kepbol ezekrol a koordinatakrol, ilyen meretu reszletet masolunk. */
     SDL_Rect src = { (melyik % 4) * MERET, (melyik / 4) * MERET, MERET, MERET };
-    /* a cel kepre, ezekre a koordinatakra masoljuk */
     SDL_Rect dest = { x, y, MERET, MERET };
-    /* kepreszlet masolasa */
     SDL_RenderCopy(renderer, mezok, &src, &dest);
 }
 
 void tabla_rajzol(SDL_Renderer *renderer, SDL_Texture *mezok, Jatek *jatek){
+    int palya_x = WINDOW_SZEL/2 - jatek->szel*MERET/2;
+    int palya_y = WINDOW_MAG/2 - jatek->mag*MERET/2;
     for(int y = 0; y < jatek->mag; ++y){
         for(int x = 0; x < jatek->szel; ++x){
             Mezo melyik;
@@ -47,7 +46,23 @@ void tabla_rajzol(SDL_Renderer *renderer, SDL_Texture *mezok, Jatek *jatek){
             } else {
                 melyik = 9;
             }
-            mezo_rajzol(renderer, mezok, melyik, x * MERET, y * MERET);
+            mezo_rajzol(renderer, mezok, melyik, x * MERET + palya_x, y * MERET + palya_y);
+        }
+    }
+    SDL_RenderPresent(renderer);
+}
+
+void felfed(SDL_Renderer *renderer, SDL_Texture *mezok, Jatek *jatek){
+    int palya_x = WINDOW_SZEL/2 - jatek->szel*MERET/2;
+    int palya_y = WINDOW_MAG/2 - jatek->mag*MERET/2;
+    for(int y = 0; y < jatek->mag; ++y){
+        for(int x = 0; x < jatek->szel; ++x){
+            Mezo melyik;
+            if(jatek->palya[y][x].akna)
+                melyik = 12;
+            else
+                melyik = jatek->palya[y][x].ertek;
+            mezo_rajzol(renderer, mezok, melyik, x * MERET + palya_x, y * MERET + palya_y);
         }
     }
     SDL_RenderPresent(renderer);

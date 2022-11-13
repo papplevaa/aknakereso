@@ -370,3 +370,40 @@
 	<time.h>
 	"jatekmenet.h"
 
+1668278040 source:c:\users\levi\desktop\aknakereso-main\aknakereso\jatekmenet.c
+	"aknakereso.h"
+	"debugmalloc.h"
+
+1668270855 c:\users\levi\desktop\aknakereso-main\aknakereso\aknakereso.h
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	<time.h>
+	<SDL.h>
+	<SDL_image.h>
+	<SDL2_gfxPrimitives.h>
+
+1561866798 c:\program files\codeblocks\mingw\include\sdl2\sdl_image.h
+	"SDL.h"
+	"SDL_version.h"
+	"begin_code.h"
+	"close_code.h"
+
+1668171812 c:\users\levi\desktop\aknakereso-main\aknakereso\debugmalloc.h
+	<stdbool.h>
+	<stddef.h>
+	<stdlib.h>
+	<stdio.h>
+	<ctype.h>
+	<string.h>
+	<stdarg.h>
+	<process.h>
+	<unistd.h>
+
+1668281934 source:c:\users\levi\desktop\aknakereso-main\aknakereso\main.c
+	"debugmalloc.h"
+
+1668270034 source:c:\users\levi\desktop\aknakereso-main\aknakereso\megjelenites.c
+	"aknakereso.h"
+	"debugmalloc.h"
+
