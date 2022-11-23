@@ -3,25 +3,28 @@
 #include "debugmalloc.h"
 
 int main(int argc, char *argv[]){
-    /** GAMME LETREHOZASA */
     Jatek jatek;
-
     // felhasznaloi interakcio lesz
     jatek.mag = 25;
     jatek.szel = 25;
-    jatek.akna_db = 15;
-
+    jatek.akna_db = 25;
     uj_jatek(&jatek);
+
+
+    Megjelenites megjelenites;
+    megjelenites.ablak_mag = 640;
+    megjelenites.ablak_szel = 800;
+    megjelenites.ikon_meret = 16;
 
     /** SDL */
     /* ablak letrehozasa */
-    SDL_Window *window;
-    SDL_Renderer *renderer;
-    sdl_init(WINDOW_SZEL, WINDOW_MAG, &window, &renderer);
+    sdl_init(&megjelenites);
+    /* kep betoltese */
+    sdl_load_texture(&megjelenites);
 
     // palyakezdo koordinata
-    int palya_x = WINDOW_SZEL/2 - jatek.szel*MERET/2;
-    int palya_y = WINDOW_MAG/2 - jatek.mag*MERET/2;
+    int palya_x = megjelenites.ablak_szel/2 - jatek.szel*megjelenites.ikon_meret/2;
+    int palya_y = megjelenites.ablak_mag/2 - jatek.mag*megjelenites.ikon_meret/2;
 
     /* konzol ujranyitasa, SDL_Init utan kell */
     #ifdef __WIN32__
@@ -29,17 +32,8 @@ int main(int argc, char *argv[]){
         freopen("CON", "w", stderr);
     #endif
 
-    /* kep betoltese */
-    SDL_Texture *mezok = IMG_LoadTexture(renderer, "img/texture.png");
-    //SDL_Surface *icon = IMG_Load("img/icon.jpg");
-    //SDL_SetWindowIcon(window, icon);
-    if(mezok == NULL){
-        SDL_Log("Nem nyithato meg a kepfajl: %s", IMG_GetError());
-        exit(1);
-    }
-
-    boxRGBA(renderer, 0, 0, WINDOW_SZEL-1, WINDOW_MAG-1, 0xFF, 0xC3, 0x00, 0xFF);
-    tabla_rajzol(renderer, mezok, &jatek);
+    boxRGBA(megjelenites.renderer, 0, 0, megjelenites.ablak_szel-1, megjelenites.ablak_mag-1, 0xFF, 0xC3, 0x00, 0xFF);
+    tabla_rajzol(&megjelenites, &jatek);
     /* ESEMENYHUROK */
     bool quit = false;
     int vege = 0;
@@ -70,31 +64,31 @@ int main(int argc, char *argv[]){
         }
 
         // eldonti hogy aktualis event mit csinaljon
-        if(felderites && vege == 0){
-            felderit(&jatek, x, y);
-            tabla_rajzol(renderer, mezok, &jatek);
-            printf("%d\n", jatek.akna_db-jatek.zaszlo_db);
+        if(vege == 0){
+            if(felderites){
+                felderit(&jatek, x, y);
+                tabla_rajzol(&megjelenites, &jatek);
+                //printf("%d\n", jatek.akna_db-jatek.zaszlo_db);
+            }
+            else if(jeloles){
+                jelol(&jatek, x, y);
+                tabla_rajzol(&megjelenites, &jatek);
+                printf("%d\n", jatek.akna_db-jatek.zaszlo_db);
+            }
             vege = vege_van(&jatek);
         }
-        else if(jeloles && vege == 0){
-            jelol(&jatek, x, y);
-            tabla_rajzol(renderer, mezok, &jatek);
-            printf("%d\n", jatek.akna_db-jatek.zaszlo_db);
-            vege = vege_van(&jatek);
-        }
-
-        if(vege == 1){
-            boxRGBA(renderer, 0, 0, WINDOW_SZEL-1, WINDOW_MAG-1, 0x90, 0xE0, 0x90, 0xFF);
-            felfed(renderer, mezok, &jatek);
+        else if(vege == 1){
+            boxRGBA(megjelenites.renderer, 0, 0, megjelenites.ablak_szel-1, megjelenites.ablak_mag-1, 0x90, 0xE0, 0x90, 0xFF);
+            felfed(&megjelenites, &jatek);
         }
         else if(vege == -1){
-            boxRGBA(renderer, 0, 0, WINDOW_SZEL-1, WINDOW_MAG-1, 0xFF, 0x57, 0x33, 0xFF);
-            felfed(renderer, mezok, &jatek);
+            boxRGBA(megjelenites.renderer, 0, 0, megjelenites.ablak_szel-1, megjelenites.ablak_mag-1, 0xFF, 0x57, 0x33, 0xFF);
+            felfed(&megjelenites, &jatek);
         }
     }
 
     /* felszabaditjuk a memoriat */
-    SDL_DestroyTexture(mezok);
+    SDL_DestroyTexture(megjelenites.mezok);
 
     /* SDL vege */
     SDL_Quit();

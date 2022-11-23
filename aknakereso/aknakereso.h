@@ -17,17 +17,12 @@ typedef struct Cella{
 }Cella;
 
 typedef struct Jatek{
-    // Jatekhoz
     Cella **palya;
     int szel, mag;
     int akna_db, zaszlo_db;
-
-    // Grafikahoz
-    //SDL_Window *window;
-    //SDL_Renderer *renderer;
-    //SDL_Texture *mezok;
-    //Mezo mezo;
 }Jatek;
+
+enum { VESZTETT = -1, JATEKBAN = 0, NYERT = 1 };
 
 /** Grafikahoz **/
 // textura ikonjai
@@ -37,6 +32,17 @@ typedef enum Mezo{
     Nyolc, Ures, Zaszlo, PZaszlo,
     Akna, PAkna
 }Mezo;
+
+// megjeleniteshez szukseges struktura
+typedef struct Megjelenites{
+    int ikon_meret;
+    int ablak_szel, ablak_mag;
+    int palya_x, palya_y;
+    SDL_Window *window;
+    SDL_Renderer *renderer;
+    SDL_Texture *mezok;
+    Mezo melyik;
+}Megjelenites;
 
 // aknak merete
 enum { MERET = 16 };
@@ -50,9 +56,10 @@ void jelol(Jatek *pj, int x, int y);
 int vege_van(Jatek *pj);
 
 /* Grafikahoz szukseges fv-ek */
-void sdl_init(int szeles, int magas, SDL_Window **pwindow, SDL_Renderer **prenderer);
-void mezo_rajzol(SDL_Renderer *renderer, SDL_Texture *mezok, Mezo melyik, int x, int y);
-void tabla_rajzol(SDL_Renderer *renderer, SDL_Texture *mezok, Jatek *jatek);
-void felfed(SDL_Renderer *renderer, SDL_Texture *mezok, Jatek *jatek);
+void sdl_init(Megjelenites *pm);
+void sdl_load_texture(Megjelenites *pm);
+void mezo_rajzol(Megjelenites *pm, int x, int y);
+void tabla_rajzol(Megjelenites *pm, Jatek *pj);
+void felfed(Megjelenites *pm, Jatek *pj);
 
 #endif // AKNAKERESO_H

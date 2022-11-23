@@ -2,7 +2,7 @@
 
 #include "debugmalloc.h"
 
-// lepes szabalyossagat ellenorzi
+/** lepes szabalyossagat ellenorzi */
 static bool szabalyos(Jatek *pj, int x, int y){
     return !(x < 0 || x >= pj->szel || y < 0 || y >= pj->mag);
 }
@@ -70,8 +70,8 @@ static void inicializal(Jatek *pj){
 
 /** Letrehoz egy uj jatekot (memoriat foglal, inicializal */
 void uj_jatek(Jatek *pj){
-    /** biztos hogy ez a legjobb ellenorzes es visszateresi ertek a foglal fvre? */
     if(foglal(pj) == false)
+    // HIBAKEZELESRE FENTTARTVA
         return;
     inicializal(pj);
 }
@@ -107,15 +107,15 @@ void felderit_seged(Jatek *pj, int x, int y){
 }
 
 /** Mezo megjelolese/jeloles megszuntetese */
-/** HIBAS, URES MEZO MEGJELOLESENEL IS NOVELI A SZAMLALOT*/
 void jelol(Jatek *pj, int x, int y){
-    if(szabalyos(pj, x, y) && !pj->palya[y][x].lathato)
+    if(szabalyos(pj, x, y) && !pj->palya[y][x].lathato){
         pj->palya[y][x].jelolt = !pj->palya[y][x].jelolt;
 
-    if(pj->palya[y][x].jelolt)
-        pj->zaszlo_db += 1;
-    else
-        pj->zaszlo_db -= 1;
+        if(pj->palya[y][x].jelolt)
+            pj->zaszlo_db += 1;
+        else
+            pj->zaszlo_db -= 1;
+    }
 }
 
 /** Jatek veget ellenorzi */
