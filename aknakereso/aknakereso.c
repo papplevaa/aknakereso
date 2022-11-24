@@ -1,43 +1,45 @@
-#include "aknakereso.h"
+﻿#include "menu.h"
 
 #include "debugmalloc.h"
 
-void aknakereso(Megjelenites *pm, Jatek *pj){
-    // kirajzolja az ures tablat
-    tabla_rajzol(pm, pj);
+int main(int argc, char *argv[]){
+    /* konzol ujranyitasa, SDL_Init utan kell */
+    #ifdef __WIN32__
+        freopen("CON", "w", stdout);
+        freopen("CON", "w", stderr);
+    #endif
 
-    // esemenyhurok
-    bool quit = false;
-    int x, y;
-    while(!quit){
-        bool felderites = false;
-        bool jeloles = false;
-        SDL_Event ev;
-        SDL_WaitEvent(&ev);
+    /* Jatek */
+    Jatek jatek;
 
-        switch(ev.type){
-            case SDL_MOUSEBUTTONDOWN:
+    /* SDL */
+    Megjelenites megjelenites;
+    sdl_init(&megjelenites);
+    sdl_load_texture(&megjelenites);
 
-                x = (ev.button.x - pm->palya_x) / MERET;
-                y = (ev.button.y - pm->palya_y) / MERET;
-                if(ev.button.button == SDL_BUTTON_LEFT)
-                    felderites = true;
-                else if(ev.button.button == SDL_BUTTON_RIGHT)
-                    jeloles = true;
-                break;
-
-            case SDL_QUIT:
-                quit = true;
-                break;
-        }
-
-        if(pj->vege == JATEKBAN){
-            if(felderites)
-                felderit(pj, x, y);
-            else if(jeloles)
-                jelol(pj, x, y);
-            pj->vege = vege_van(pj);
-            (pj->vege == JATEKBAN) ? tabla_rajzol(pm, pj) : felfed(pm, pj);
-        }
+    switch(fomenu(&megjelenites)){
+        case UJ_JATEK:
+            SDL_RenderClear(megjelenites.renderer);
+            masodlagos_menu(&megjelenites, &jatek);
+            uj_jatek(&jatek);
+            megjelenites.palya_x = WINDOW_SZEL/2 - jatek.szel*MERET/2;
+            megjelenites.palya_y = WINDOW_MAG/2 - jatek.mag*MERET/2;
+            jatekmenu(&megjelenites, &jatek);
+            break;
+        case BETOLTES:
+//            betoltes();
+//            aknakereso();
+            break;
     }
+
+    SDL_DestroyTexture(megjelenites.mezok);
+    SDL_DestroyRenderer(megjelenites.renderer);
+    SDL_DestroyWindow(megjelenites.window);
+    SDL_Quit();
+
+    /* Jateknak foglalt memoriaterulet felszabaditasa */
+    free(jatek.palya[0]);
+    free(jatek.palya);
+
+    return 0;
 }

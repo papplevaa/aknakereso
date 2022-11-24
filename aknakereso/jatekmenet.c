@@ -1,34 +1,34 @@
-#include "aknakereso.h"
+#include "jatekmenet.h"
 
 #include "debugmalloc.h"
 
-/** lepes szabalyossagat ellenorzi */
+/* Lepes szabalyossagat ellenorzi */
 static bool szabalyos(Jatek *pj, int x, int y){
     return !(x < 0 || x >= pj->szel || y < 0 || y >= pj->mag);
 }
 
-/** Memoriat foglal a jatekmenethez (Jatek struct) */
-static bool foglal(Jatek *pj){
+/* Memoriat foglal a jatekmenethez (Jatek struct) */
+static void foglal(Jatek *pj){
     // pointertombnek memoriafoglalas
     pj->palya = (Cella**) malloc(pj->mag * sizeof(Cella*));
     if(pj->palya == NULL)
-        return false;
+        exit(1);
 
     // a pointertomb elso cimere mag * szel meretu 1D tombnek memoriafoglalas
     pj->palya[0] = (Cella*) malloc(pj->mag * pj->szel * sizeof(Cella));
     if(pj->palya[0] == NULL)
-        return false;
+        exit(1);
 
     // pointertomb inicializalasa uj "sorokhoz" merten
     for(int y = 1; y < pj->mag; ++y)
         pj->palya[y] = pj->palya[0] + y * pj->szel;
-    return true;
 }
 
-/** A palyat inicializalja, minden cella kezodertek 0, aknak random valasztasa, cellaertek kiszamitasa */
+/* A palyat inicializalja, minden cella kezodertek 0, aknak random valasztasa, cellaertek kiszamitasa */
 static void inicializal(Jatek *pj){
     // kezdoertekek 0-ra allitasa
     pj->zaszlo_db = 0;
+    pj->vege = JATEKBAN;
     for(int y = 0; y < pj->mag; ++y){
         for(int x = 0; x < pj->szel; ++x){
             pj->palya[y][x].ertek = 0;
@@ -51,7 +51,6 @@ static void inicializal(Jatek *pj){
         i++;
     }
 
-
     // szamok
     for(int y = 0; y < pj->mag; ++y){
         for(int x = 0; x < pj->szel; ++x){
@@ -68,23 +67,14 @@ static void inicializal(Jatek *pj){
     }
 }
 
-/** Letrehoz egy uj jatekot (memoriat foglal, inicializal */
+/* Letrehoz egy uj jatekot (memoriat foglal, inicializal */
 void uj_jatek(Jatek *pj){
-    if(foglal(pj) == false)
-    // HIBAKEZELESRE FENTTARTVA
-        return;
+    foglal(pj);
     inicializal(pj);
 }
 
-/** Automatikus felderites */
-// nem szabad jelolt cellara meghivni
-void felderit(Jatek *pj, int x, int y){
-    if(szabalyos(pj, x, y)){
-        if(!pj->palya[y][x].jelolt)
-            felderit_seged(pj, x, y);
-    }
-}
-
+/* Automatikus felderites */
+// A felderites hajtoereje, rekurziot hasznal a cellak bejarasahoz
 void felderit_seged(Jatek *pj, int x, int y){
     if(szabalyos(pj, x, y)){
         if(pj->palya[y][x].ertek == 0 && !pj->palya[y][x].lathato){
@@ -108,7 +98,15 @@ void felderit_seged(Jatek *pj, int x, int y){
     }
 }
 
-/** Mezo megjelolese/jeloles megszuntetese */
+// Csak szabalyos es nem jelolt cellat ad oda a felderit_seged()-nek
+void felderit(Jatek *pj, int x, int y){
+    if(szabalyos(pj, x, y)){
+        if(!pj->palya[y][x].jelolt)
+            felderit_seged(pj, x, y);
+    }
+}
+
+/* Mezo megjelolese/jeloles megszuntetese */
 void jelol(Jatek *pj, int x, int y){
     if(szabalyos(pj, x, y) && !pj->palya[y][x].lathato){
         pj->palya[y][x].jelolt = !pj->palya[y][x].jelolt;
@@ -120,19 +118,19 @@ void jelol(Jatek *pj, int x, int y){
     }
 }
 
-/** Jatek veget ellenorzi */
-int vege_van(Jatek *pj){
+/* Jatek veget ellenorzi */
+jatekallas vege_van(Jatek *pj){
     bool van_ures = false;
     for(int y = 0; y < pj->mag; ++y){
         for(int x = 0; x < pj->szel; ++x){
             if(pj->palya[y][x].akna && pj->palya[y][x].lathato)
-                return -1;
+                return VESZTETT;
             if((!pj->palya[y][x].akna && !pj->palya[y][x].lathato) || (pj->palya[y][x].akna && !pj->palya[y][x].jelolt))
                 van_ures = true;
         }
     }
     if(van_ures)
-        return 0;
+        return JATEKBAN;
     else
-        return 1;
+        return NYERT;
 }

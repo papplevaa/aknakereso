@@ -49,16 +49,19 @@
 		<Unit filename="aknakereso.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="aknakereso.h" />
+		<Unit filename="debugmalloc.h" />
 		<Unit filename="jatekmenet.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="main.c">
+		<Unit filename="jatekmenet.h" />
+		<Unit filename="menu.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="megjelenites.c">
+		<Unit filename="menu.h" />
+		<Unit filename="rajzolo.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="rajzolo.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

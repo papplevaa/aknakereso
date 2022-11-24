@@ -370,11 +370,11 @@
 	<time.h>
 	"jatekmenet.h"
 
-1668278040 source:c:\users\levi\desktop\aknakereso-main\aknakereso\jatekmenet.c
-	"aknakereso.h"
+1669332874 source:c:\users\levi\desktop\aknakereso-main\aknakereso\jatekmenet.c
+	"jatekmenet.h"
 	"debugmalloc.h"
 
-1668270855 c:\users\levi\desktop\aknakereso-main\aknakereso\aknakereso.h
+1669331215 c:\users\levi\desktop\aknakereso-main\aknakereso\aknakereso.h
 	<stdio.h>
 	<stdlib.h>
 	<stdbool.h>
@@ -382,6 +382,7 @@
 	<SDL.h>
 	<SDL_image.h>
 	<SDL2_gfxPrimitives.h>
+	<SDL_ttf.h>
 
 1561866798 c:\program files\codeblocks\mingw\include\sdl2\sdl_image.h
 	"SDL.h"
@@ -389,7 +390,7 @@
 	"begin_code.h"
 	"close_code.h"
 
-1668171812 c:\users\levi\desktop\aknakereso-main\aknakereso\debugmalloc.h
+1669287048 c:\users\levi\desktop\aknakereso-main\aknakereso\debugmalloc.h
 	<stdbool.h>
 	<stddef.h>
 	<stdlib.h>
@@ -400,11 +401,12 @@
 	<process.h>
 	<unistd.h>
 
-1668281934 source:c:\users\levi\desktop\aknakereso-main\aknakereso\main.c
+1669331785 source:c:\users\levi\desktop\aknakereso-main\aknakereso\main.c
+	"menu.h"
 	"debugmalloc.h"
 
-1668270034 source:c:\users\levi\desktop\aknakereso-main\aknakereso\megjelenites.c
-	"aknakereso.h"
+1669331842 source:c:\users\levi\desktop\aknakereso-main\aknakereso\megjelenites.c
+	"rajzolo.h"
 	"debugmalloc.h"
 
 1669243585 source:d:\programming\bme\nhf\aknakereso_v1\aknakereso\jatekmenet.c
@@ -447,4 +449,31 @@
 	"SDL.h"
 	"begin_code.h"
 	"close_code.h"
+
+1669332095 source:c:\users\levi\desktop\aknakereso-main\aknakereso\aknakereso.c
+	"debugmalloc.h"
+
+1669332280 source:c:\users\levi\desktop\aknakereso-main\aknakereso\menu.c
+	"menu.h"
+	"debugmalloc.h"
+
+1669331438 c:\users\levi\desktop\aknakereso-main\aknakereso\jatekmenet.h
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	<time.h>
+
+1669333529 c:\users\levi\desktop\aknakereso-main\aknakereso\rajzolo.h
+	<SDL.h>
+	<SDL_image.h>
+	<SDL2_gfxPrimitives.h>
+	<SDL_ttf.h>
+	"jatekmenet.h"
+
+1669332158 c:\users\levi\desktop\aknakereso-main\aknakereso\menu.h
+	"rajzolo.h"
+
+1669333498 source:c:\users\levi\desktop\aknakereso-main\aknakereso\rajzolo.c
+	"rajzolo.h"
+	"debugmalloc.h"
 
