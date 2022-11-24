@@ -407,3 +407,44 @@
 	"aknakereso.h"
 	"debugmalloc.h"
 
+1669243585 source:d:\programming\bme\nhf\aknakereso_v1\aknakereso\jatekmenet.c
+	"aknakereso.h"
+	"debugmalloc.h"
+
+1669245136 d:\programming\bme\nhf\aknakereso_v1\aknakereso\aknakereso.h
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	<time.h>
+	<SDL.h>
+	<SDL_image.h>
+	<SDL2_gfxPrimitives.h>
+	<SDL_ttf.h>
+
+1669198692 d:\programming\bme\nhf\aknakereso_v1\aknakereso\debugmalloc.h
+	<stdbool.h>
+	<stddef.h>
+	<stdlib.h>
+	<stdio.h>
+	<ctype.h>
+	<string.h>
+	<stdarg.h>
+	<process.h>
+	<unistd.h>
+
+1669246064 source:d:\programming\bme\nhf\aknakereso_v1\aknakereso\main.c
+	"debugmalloc.h"
+
+1669248441 source:d:\programming\bme\nhf\aknakereso_v1\aknakereso\megjelenites.c
+	"aknakereso.h"
+	"debugmalloc.h"
+
+1669241916 source:d:\programming\bme\nhf\aknakereso_v1\aknakereso\aknakereso.c
+	"aknakereso.h"
+	"debugmalloc.h"
+
+1547322290 c:\program files\codeblocks\mingw\include\sdl2\sdl_ttf.h
+	"SDL.h"
+	"begin_code.h"
+	"close_code.h"
+

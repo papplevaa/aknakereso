@@ -79,8 +79,10 @@ void uj_jatek(Jatek *pj){
 /** Automatikus felderites */
 // nem szabad jelolt cellara meghivni
 void felderit(Jatek *pj, int x, int y){
-    if(!pj->palya[y][x].jelolt)
-        felderit_seged(pj, x, y);
+    if(szabalyos(pj, x, y)){
+        if(!pj->palya[y][x].jelolt)
+            felderit_seged(pj, x, y);
+    }
 }
 
 void felderit_seged(Jatek *pj, int x, int y){
