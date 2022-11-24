@@ -46,18 +46,19 @@
 			<Add library="dxguid" />
 			<Add directory="$(#sdl2.lib)" />
 		</Linker>
+		<Unit filename="aknakereso.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="aknakereso.h" />
 		<Unit filename="jatekmenet.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="jatekmenet.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="megjelenites.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="megjelenites.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>
