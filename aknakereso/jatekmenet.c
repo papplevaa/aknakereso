@@ -24,6 +24,12 @@ static void foglal(Jatek *pj){
         pj->palya[y] = pj->palya[0] + y * pj->szel;
 }
 
+void felszabadit(Jatek *pj){
+    free(pj->palya[0]);
+    free(pj->palya);
+    pj->palya = NULL;
+}
+
 /* A palyat inicializalja, minden cella kezodertek 0, aknak random valasztasa, cellaertek kiszamitasa */
 static void inicializal(Jatek *pj){
     // kezdoertekek 0-ra allitasa

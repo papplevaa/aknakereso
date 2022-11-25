@@ -21,6 +21,7 @@ typedef struct Jatek{
 typedef enum jatekallas{ VESZTETT, JATEKBAN, NYERT }jatekallas;
 
 void uj_jatek(Jatek *pj);
+void felszabadit(Jatek *pj);
 void felderit(Jatek *pj, int x, int y);
 void felderit_seged(Jatek *pj, int x, int y);
 void jelol(Jatek *pj, int x, int y);
