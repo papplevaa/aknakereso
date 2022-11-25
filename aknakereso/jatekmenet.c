@@ -8,7 +8,7 @@ static bool szabalyos(Jatek *pj, int x, int y){
 }
 
 /* Memoriat foglal a jatekmenethez (Jatek struct) */
-static void foglal(Jatek *pj){
+void foglal(Jatek *pj){
     // pointertombnek memoriafoglalas
     pj->palya = (Cella**) malloc(pj->mag * sizeof(Cella*));
     if(pj->palya == NULL)
@@ -31,8 +31,9 @@ void felszabadit(Jatek *pj){
 }
 
 /* A palyat inicializalja, minden cella kezodertek 0, aknak random valasztasa, cellaertek kiszamitasa */
-static void inicializal(Jatek *pj){
+void inicializal(Jatek *pj){
     // kezdoertekek 0-ra allitasa
+    pj->ido = 0;
     pj->zaszlo_db = 0;
     pj->vege = JATEKBAN;
     for(int y = 0; y < pj->mag; ++y){
@@ -71,12 +72,6 @@ static void inicializal(Jatek *pj){
             }
         }
     }
-}
-
-/* Letrehoz egy uj jatekot (memoriat foglal, inicializal */
-void uj_jatek(Jatek *pj){
-    foglal(pj);
-    inicializal(pj);
 }
 
 /* Automatikus felderites */

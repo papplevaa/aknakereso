@@ -22,10 +22,10 @@ typedef struct Megjelenites{
     SDL_Texture *mezok;
 }Megjelenites;
 
-enum { WINDOW_MAG = 640, WINDOW_SZEL = 800, MERET = 16 };
+enum { WINDOW_MAG = 640, WINDOW_SZEL = 800, MERET = 16, FEJLEC = 64};
 
 void hatter(Megjelenites *pm);
-void vonal(Megjelenites *pm);
+void vonal(Megjelenites *pm, int h);
 void szoveg(Megjelenites *pm, char *szoveg, int x, int y);
 void mezo_rajzol(Megjelenites *pm, Mezo melyik, int x, int y);
 void tabla_rajzol(Megjelenites *pm, Jatek *pj);

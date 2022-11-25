@@ -184,7 +184,7 @@ jatekmod fomenu(Megjelenites *pm){
     hatter(pm);
     szoveg(pm, "Új játék", 0, WINDOW_MAG/2);
     szoveg(pm, "Betöltés", WINDOW_MAG/2, WINDOW_MAG/2);
-    vonal(pm);
+    vonal(pm, WINDOW_MAG/2);
 
     // renderer uritese
     SDL_RenderClear(pm->renderer);
@@ -244,8 +244,18 @@ bool uj_jatek_menu(Megjelenites *pm, Jatek *pj){
         return false;
     pj->akna_db = adat;
 
+    foglal(pj);
+    inicializal(pj);
+
     SDL_RenderClear(pm->renderer);
     return true;
+}
+
+Uint32 idozito(Uint32 ms){
+    SDL_Event ev;
+    ev.type = SDL_USEREVENT;
+    SDL_PushEvent(&ev);
+    return ms;
 }
 
 void jatekmenu(Megjelenites *pm, Jatek *pj){
@@ -262,20 +272,32 @@ void jatekmenu(Megjelenites *pm, Jatek *pj){
     // kirajzolja az ures tablat
     tabla_rajzol(pm, pj);
 
-    // esemenyhurok
-    bool quit = false;
+    bool kilep = false;
     int x, y;
 
+    // palya bal felso pontja
     int palya_x = WINDOW_SZEL/2 - (pj->szel*MERET)/2;
-    int palya_y = WINDOW_MAG/2 - (pj->mag*MERET)/2;
+    int palya_y = FEJLEC + (WINDOW_MAG-FEJLEC)/2 - pj->mag*MERET/2;
 
-    while(!quit){
+    // masodperc szamlalo
+    SDL_TimerID id = SDL_AddTimer(1000, idozito, NULL);
+    char ido_str[50];
+    // esemenyhurok
+    while(!kilep){
         bool felderites = false;
         bool jeloles = false;
         SDL_Event ev;
         SDL_WaitEvent(&ev);
 
         switch(ev.type){
+            case SDL_USEREVENT:
+                SDL_RenderClear(pm->renderer);
+                sprintf(ido_str, "%d", pj->ido);
+                szoveg(pm, ido_str, 0, FEJLEC);
+                //vonal(pm, FEJLEC);
+                tabla_rajzol(pm, pj);
+                pj->ido++;
+                break;
             case SDL_MOUSEBUTTONDOWN:
                 x = (ev.button.x - palya_x) / MERET;
                 y = (ev.button.y - palya_y) / MERET;
@@ -286,7 +308,7 @@ void jatekmenu(Megjelenites *pm, Jatek *pj){
                 break;
 
             case SDL_QUIT:
-                quit = true;
+                kilep = true;
                 break;
         }
 
@@ -296,8 +318,13 @@ void jatekmenu(Megjelenites *pm, Jatek *pj){
             else if(jeloles)
                 jelol(pj, x, y);
             pj->vege = vege_van(pj);
-            (pj->vege == JATEKBAN) ? tabla_rajzol(pm, pj) : felfed(pm, pj);
+            tabla_rajzol(pm, pj);
+        } else {
+            SDL_RemoveTimer(id);
+            felfed(pm, pj);
         }
+
+        mentes(pj);
     }
 
     // textura felszabaditasa

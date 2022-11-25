@@ -2,6 +2,7 @@
 #define MENU_H
 
 #include "rajzolo.h"
+#include "fajlkezeles.h"
 
 typedef enum jatekmod{ UJ_JATEK, BETOLTES }jatekmod;
 

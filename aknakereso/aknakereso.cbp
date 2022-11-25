@@ -50,6 +50,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="debugmalloc.h" />
+		<Unit filename="fajlkezeles.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="fajlkezeles.h" />
 		<Unit filename="jatekmenet.c">
 			<Option compilerVar="CC" />
 		</Unit>

@@ -13,20 +13,21 @@ int main(int argc, char *argv[]){
     Megjelenites megjelenites;
     sdl_init(&megjelenites);
 
-    bool sikeres;
+    bool ok;
     switch(fomenu(&megjelenites)){
         case UJ_JATEK:
-            sikeres = uj_jatek_menu(&megjelenites, &jatek);
-            if(!sikeres)
+            ok = uj_jatek_menu(&megjelenites, &jatek);
+            if(!ok)
                 break;
-            uj_jatek(&jatek);
             jatekmenu(&megjelenites, &jatek);
             felszabadit(&jatek);
             break;
         case BETOLTES:
-//            betoltes(&jatek);
-//            jatekmenu(&megjelenites, &jatek);
-//            felszabadit(&jatek);
+            ok = betoltes(&jatek);
+            if(!ok)
+                break;
+            jatekmenu(&megjelenites, &jatek);
+            felszabadit(&jatek);
             break;
     }
 

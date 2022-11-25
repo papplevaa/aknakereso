@@ -6,6 +6,8 @@
 #include<stdbool.h>
 #include<time.h>
 
+typedef enum jatekallas{ VESZTETT, JATEKBAN, NYERT }jatekallas;
+
 typedef struct Cella{
     int ertek;
     bool akna, lathato, jelolt;
@@ -15,12 +17,12 @@ typedef struct Jatek{
     Cella **palya;
     int szel, mag;
     int akna_db, zaszlo_db;
-    int vege;
+    int ido;
+    jatekallas vege;
 }Jatek;
 
-typedef enum jatekallas{ VESZTETT, JATEKBAN, NYERT }jatekallas;
-
-void uj_jatek(Jatek *pj);
+void foglal(Jatek *pj);
+void inicializal(Jatek *pj);
 void felszabadit(Jatek *pj);
 void felderit(Jatek *pj, int x, int y);
 void felderit_seged(Jatek *pj, int x, int y);
