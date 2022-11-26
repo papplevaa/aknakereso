@@ -17,7 +17,7 @@ void foglal(Jatek *pj){
     // a pointertomb elso cimere mag * szel meretu 1D tombnek memoriafoglalas
     pj->palya[0] = (Cella*) malloc(pj->mag * pj->szel * sizeof(Cella));
     if(pj->palya[0] == NULL)
-        exit(1);
+        exit(2);
 
     // pointertomb inicializalasa uj "sorokhoz" merten
     for(int y = 1; y < pj->mag; ++y)
@@ -58,7 +58,7 @@ void inicializal(Jatek *pj){
         i++;
     }
 
-    // szamok
+    // cellak kiertekelese (hany szomszedos akna van?)
     for(int y = 0; y < pj->mag; ++y){
         for(int x = 0; x < pj->szel; ++x){
             for(int i = -1; i <= 1; ++i){
@@ -75,11 +75,15 @@ void inicializal(Jatek *pj){
 }
 
 /* Automatikus felderites */
-// A felderites hajtoereje, rekurziot hasznal a cellak bejarasahoz
+// A felderites hajtoereje, rekurziot hasznal a palya bejarasahoz
 void felderit_seged(Jatek *pj, int x, int y){
     if(szabalyos(pj, x, y)){
+        // rekurzio feltetele: cella erteke 0 es nem lathato -> nezzuk meg a szomszedos cellakat is
         if(pj->palya[y][x].ertek == 0 && !pj->palya[y][x].lathato){
+            // legyen lathato, hisz felderitunk
             pj->palya[y][x].lathato = true;
+            // ha jelolt volt eddig, akkor ne legyen
+            // ennek megfeleloen a zaszlo_db szamlalot is csokketnjuk
             if(pj->palya[y][x].jelolt){
                 pj->palya[y][x].jelolt = false;
                 pj->zaszlo_db -= 1;
@@ -95,14 +99,17 @@ void felderit_seged(Jatek *pj, int x, int y){
             felderit_seged(pj, x+1, y+1);
         } else {
             pj->palya[y][x].lathato = true;
+            if(pj->palya[y][x].jelolt){
+                pj->palya[y][x].jelolt = false;
+                pj->zaszlo_db -= 1;
+            }
         }
     }
 }
 
 // Csak szabalyos es nem jelolt cellat ad oda a felderit_seged()-nek
 void felderit(Jatek *pj, int x, int y){
-    if(szabalyos(pj, x, y)){
-        if(!pj->palya[y][x].jelolt)
+    if(szabalyos(pj, x, y) && !pj->palya[y][x].jelolt){
             felderit_seged(pj, x, y);
     }
 }
@@ -120,7 +127,7 @@ void jelol(Jatek *pj, int x, int y){
 }
 
 /* Jatek veget ellenorzi */
-jatekallas vege_van(Jatek *pj){
+int vege_van(Jatek *pj){
     bool van_ures = false;
     for(int y = 0; y < pj->mag; ++y){
         for(int x = 0; x < pj->szel; ++x){

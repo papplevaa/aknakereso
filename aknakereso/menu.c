@@ -2,45 +2,7 @@
 
 #include "debugmalloc.h"
 
-void sdl_init(Megjelenites *pm) {
-    if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
-        SDL_Log("Nem indithato az SDL: %s", SDL_GetError());
-        exit(1);
-    }
-    SDL_Window *window = SDL_CreateWindow("Aknakereső", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_SZEL, WINDOW_MAG, 0);
-    if (window == NULL) {
-        SDL_Log("Nem hozhato letre az ablak: %s", SDL_GetError());
-        exit(1);
-    }
-    SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
-    if (renderer == NULL) {
-        SDL_Log("Nem hozhato letre a megjelenito: %s", SDL_GetError());
-        exit(1);
-    }
-    TTF_Init();
-    TTF_Font *font = TTF_OpenFont("font/Monocraft.ttf", 32);
-    if(font == NULL){
-        SDL_Log("Nem sikerult megnyitni a fontot! %s\n", TTF_GetError());
-        exit(1);
-    }
 
-    pm->window = window;
-    pm->renderer = renderer;
-    pm->font = font;
-}
-
-void sdl_close(Megjelenites *pm){
-    TTF_CloseFont(pm->font);
-    pm->font = NULL;
-
-    SDL_DestroyRenderer(pm->renderer);
-    pm->renderer = NULL;
-
-    SDL_DestroyWindow(pm->window);
-    pm->window = NULL;
-
-    SDL_Quit();
-}
 
 /* Beolvas egy szoveget a billentyuzetrol.
  * A rajzolashoz hasznalt font es a megjelenito az utolso parameterek.
@@ -179,14 +141,13 @@ static int adat_beker(Megjelenites *pm, int min, int max){
     return adat_int;
 }
 
-jatekmod fomenu(Megjelenites *pm){
-    // hatterszin
-    hatter(pm);
-    szoveg(pm, "Új játék", 0, WINDOW_MAG/2);
-    szoveg(pm, "Betöltés", WINDOW_MAG/2, WINDOW_MAG/2);
-    vonal(pm, WINDOW_MAG/2);
+int fomenu(Megjelenites *pm){
+    boxRGBA(pm->renderer, 0, 0, WINDOW_SZEL-1, WINDOW_MAG-1, 0x6A, 0x73, 0x7B, 0xFF);
+    szoveg(pm, "Új játék", 0, 0, WINDOW_SZEL-1, WINDOW_MAG/2);
+    szoveg(pm, "Betöltés", 0, WINDOW_MAG/2, WINDOW_SZEL-1, WINDOW_MAG-1);
+    thickLineRGBA(pm->renderer, 0, WINDOW_MAG/2, WINDOW_SZEL-1, WINDOW_MAG/2, 3, 0xFF, 0xFF, 0xFF, 0xFF);
 
-    // renderer uritese
+    SDL_RenderPresent(pm->renderer);
     SDL_RenderClear(pm->renderer);
 
     bool kilep = false;
@@ -214,9 +175,9 @@ bool uj_jatek_menu(Megjelenites *pm, Jatek *pj){
 
     min = 5;
     max = WINDOW_SZEL / MERET;
-    hatter(pm);
+    boxRGBA(pm->renderer, 0, 0, WINDOW_SZEL-1, WINDOW_MAG-1, 0x6A, 0x73, 0x7B, 0xFF);
     sprintf(str, "Pálya szélessége (%d..%d):", min, max);
-    szoveg(pm, str, WINDOW_MAG/4-40, WINDOW_MAG/2);
+    szoveg(pm, str, 0, 0, WINDOW_SZEL-1, WINDOW_MAG-2*FEJLEC);
     adat = adat_beker(pm, min, max);
     if(adat == -1)
         return false;
@@ -225,33 +186,32 @@ bool uj_jatek_menu(Megjelenites *pm, Jatek *pj){
 
     min = 5;
     max = (WINDOW_MAG-32) / MERET;
-    hatter(pm);
+    boxRGBA(pm->renderer, 0, 0, WINDOW_SZEL-1, WINDOW_MAG-1, 0x6A, 0x73, 0x7B, 0xFF);
     sprintf(str, "Pálya magassága (%d..%d):", min, max);
-    szoveg(pm, str, WINDOW_MAG/4-40, WINDOW_MAG/2);
+    szoveg(pm, str, 0, 0, WINDOW_SZEL-1, WINDOW_MAG-2*FEJLEC);
     adat = adat_beker(pm, min, max);
     if(adat == -1)
         return false;
     pj->mag = adat;
     SDL_RenderClear(pm->renderer);
 
-    min = 5;
-    max = pj->szel * pj->mag * 30/100;
-    hatter(pm);
+    min = 1;
+    max = pj->szel * pj->mag * AKNA_ARANY/100;
+    boxRGBA(pm->renderer, 0, 0, WINDOW_SZEL-1, WINDOW_MAG-1, 0x6A, 0x73, 0x7B, 0xFF);
     sprintf(str, "Aknák száma (%d..%d):", min, max);
-    szoveg(pm, str, WINDOW_MAG/4-40, WINDOW_MAG/2);
+    szoveg(pm, str, 0, 0, WINDOW_SZEL-1, WINDOW_MAG-2*FEJLEC);
     adat = adat_beker(pm, min, max);
     if(adat == -1)
         return false;
     pj->akna_db = adat;
+    SDL_RenderClear(pm->renderer);
 
     foglal(pj);
     inicializal(pj);
-
-    SDL_RenderClear(pm->renderer);
     return true;
 }
 
-Uint32 idozito(Uint32 ms){
+Uint32 idozito(Uint32 ms, void *param){
     SDL_Event ev;
     ev.type = SDL_USEREVENT;
     SDL_PushEvent(&ev);
@@ -259,29 +219,22 @@ Uint32 idozito(Uint32 ms){
 }
 
 void jatekmenu(Megjelenites *pm, Jatek *pj){
-    // hatter
-    hatter(pm);
-
-    // textura betoltese
-    pm->mezok = IMG_LoadTexture(pm->renderer, "img/texture.png");
-    if(pm->mezok == NULL){
-        SDL_Log("Nem nyithato meg a kepfajl: %s", IMG_GetError());
-        exit(1);
-    }
-
-    // kirajzolja az ures tablat
-    tabla_rajzol(pm, pj);
-
+    //
     bool kilep = false;
-    int x, y;
-
     // palya bal felso pontja
     int palya_x = WINDOW_SZEL/2 - (pj->szel*MERET)/2;
     int palya_y = FEJLEC + (WINDOW_MAG-FEJLEC)/2 - pj->mag*MERET/2;
-
-    // masodperc szamlalo
+    //
+    int x, y;
+    //
     SDL_TimerID id = SDL_AddTimer(1000, idozito, NULL);
-    char ido_str[50];
+
+    // elso kirajzolas
+    boxRGBA(pm->renderer, 0, 0, WINDOW_SZEL-1, WINDOW_MAG-1, 0x6A, 0x73, 0x7B, 0xFF);
+    fejlec(pm, pj);
+    tabla_rajzol(pm, pj);
+    pj->ido++;
+
     // esemenyhurok
     while(!kilep){
         bool felderites = false;
@@ -291,11 +244,7 @@ void jatekmenu(Megjelenites *pm, Jatek *pj){
 
         switch(ev.type){
             case SDL_USEREVENT:
-                SDL_RenderClear(pm->renderer);
-                sprintf(ido_str, "%d", pj->ido);
-                szoveg(pm, ido_str, 0, FEJLEC);
-                //vonal(pm, FEJLEC);
-                tabla_rajzol(pm, pj);
+                fejlec(pm, pj);
                 pj->ido++;
                 break;
             case SDL_MOUSEBUTTONDOWN:
@@ -318,15 +267,14 @@ void jatekmenu(Megjelenites *pm, Jatek *pj){
             else if(jeloles)
                 jelol(pj, x, y);
             pj->vege = vege_van(pj);
+            fejlec(pm, pj);
             tabla_rajzol(pm, pj);
         } else {
             SDL_RemoveTimer(id);
+            fejlec(pm, pj);
             felfed(pm, pj);
         }
 
         mentes(pj);
     }
-
-    // textura felszabaditasa
-    SDL_DestroyTexture(pm->mezok);
 }

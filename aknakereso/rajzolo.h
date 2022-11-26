@@ -8,6 +8,8 @@
 
 #include "jatekmenet.h"
 
+enum { WINDOW_MAG = 640, WINDOW_SZEL = 800, MERET = 16, FEJLEC = 64};
+
 typedef enum Mezo{
     FUres, Egy, Ketto, Harom,
     Negy, Ot, Hat, Het,
@@ -22,13 +24,11 @@ typedef struct Megjelenites{
     SDL_Texture *mezok;
 }Megjelenites;
 
-enum { WINDOW_MAG = 640, WINDOW_SZEL = 800, MERET = 16, FEJLEC = 64};
-
-void hatter(Megjelenites *pm);
-void vonal(Megjelenites *pm, int h);
-void szoveg(Megjelenites *pm, char *szoveg, int x, int y);
-void mezo_rajzol(Megjelenites *pm, Mezo melyik, int x, int y);
+void sdl_init(Megjelenites *pm);
+void sdl_close(Megjelenites *pm);
+void szoveg(Megjelenites* pm, char *szoveg, int x1, int y1, int x2, int y2);
 void tabla_rajzol(Megjelenites *pm, Jatek *pj);
 void felfed(Megjelenites *pm, Jatek *pj);
+void fejlec(Megjelenites *pm, Jatek *pj);
 
 #endif // RAJZOLO_H
