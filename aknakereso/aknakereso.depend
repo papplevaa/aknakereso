@@ -370,7 +370,7 @@
 	<time.h>
 	"jatekmenet.h"
 
-1669401357 source:c:\users\levi\desktop\aknakereso-main\aknakereso\jatekmenet.c
+1669540465 source:c:\users\levi\desktop\aknakereso-main\aknakereso\jatekmenet.c
 	"jatekmenet.h"
 	"debugmalloc.h"
 
@@ -450,37 +450,38 @@
 	"begin_code.h"
 	"close_code.h"
 
-1669404852 source:c:\users\levi\desktop\aknakereso-main\aknakereso\aknakereso.c
+1669540676 source:c:\users\levi\desktop\aknakereso-main\aknakereso\aknakereso.c
 	"debugmalloc.h"
 
-1669406711 source:c:\users\levi\desktop\aknakereso-main\aknakereso\menu.c
+1669539578 source:c:\users\levi\desktop\aknakereso-main\aknakereso\menu.c
 	"menu.h"
 	"debugmalloc.h"
 
-1669401338 c:\users\levi\desktop\aknakereso-main\aknakereso\jatekmenet.h
+1669540938 c:\users\levi\desktop\aknakereso-main\aknakereso\jatekmenet.h
 	<stdio.h>
 	<stdlib.h>
 	<stdbool.h>
 	<time.h>
 
-1669400374 c:\users\levi\desktop\aknakereso-main\aknakereso\rajzolo.h
+1669541039 c:\users\levi\desktop\aknakereso-main\aknakereso\rajzolo.h
 	<SDL.h>
 	<SDL_image.h>
 	<SDL2_gfxPrimitives.h>
 	<SDL_ttf.h>
 	"jatekmenet.h"
 
-1669388419 c:\users\levi\desktop\aknakereso-main\aknakereso\menu.h
+1669541055 c:\users\levi\desktop\aknakereso-main\aknakereso\menu.h
 	"rajzolo.h"
 	"fajlkezeles.h"
 
-1669405118 source:c:\users\levi\desktop\aknakereso-main\aknakereso\rajzolo.c
+1669539855 source:c:\users\levi\desktop\aknakereso-main\aknakereso\rajzolo.c
 	"rajzolo.h"
 	"debugmalloc.h"
 
-1669406464 source:c:\users\levi\desktop\aknakereso-main\aknakereso\fajlkezeles.c
+1669541353 source:c:\users\levi\desktop\aknakereso-main\aknakereso\fajlkezeles.c
 	"fajlkezeles.h"
+	"debugmalloc.h"
 
-1669387952 c:\users\levi\desktop\aknakereso-main\aknakereso\fajlkezeles.h
+1669483440 c:\users\levi\desktop\aknakereso-main\aknakereso\fajlkezeles.h
 	"jatekmenet.h"
 

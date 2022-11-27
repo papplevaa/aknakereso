@@ -6,7 +6,8 @@
  * A rajzolashoz hasznalt struktura az utolso parametere.
  * Az elso a tomb, ahova a beolvasott szoveg kerul.
  * A masodik a maximális hossz, ami beolvasható.
- * A visszateresi erteke logikai igaz, ha a felhasznalo ki szeretne lepni */
+ * A visszateresi erteke logikai igaz, ha a felhasznalo ki szeretne lepni.
+ * Az input_text fuggveny alapja: https://infoc.eet.bme.hu/sdl/#7 */
 static bool input_text(char *dest, size_t hossz, Megjelenites *pm){
     /* A szovegdoboz es a szoveg, kurzor szine */
     SDL_Color hatter = { 0, 0, 0 };
