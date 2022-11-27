@@ -1,5 +1,7 @@
 #include "fajlkezeles.h"
 
+#include "debugmalloc.h"
+
 /* A jatekallapot menteseert felel, igaz erteket ad, ha sikeres volt a mentes */
 bool mentes(Jatek *pj){
     FILE *fp = fopen("aknakereso.txt", "w");
