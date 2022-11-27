@@ -3,20 +3,22 @@
 #include "debugmalloc.h"
 
 /* Memoriat foglal a jatekmenethez (Jatek struct) */
-void foglal(Jatek *pj){
+bool foglal(Jatek *pj){
     /* Pointertombnek memoriafoglalas */
     pj->palya = (Cella**) malloc(pj->mag * sizeof(Cella*));
     if(pj->palya == NULL)
-        exit(1);
+        return false;
 
     /* A pointertomb elso cimere mag * szel meretu 1D tombnek memoriafoglalas */
     pj->palya[0] = (Cella*) malloc(pj->mag * pj->szel * sizeof(Cella));
     if(pj->palya[0] == NULL)
-        exit(2);
+        return false;
 
     /* Pointertomb inicializalasa uj "sorokhoz" merten */
     for(int y = 1; y < pj->mag; ++y)
         pj->palya[y] = pj->palya[0] + y * pj->szel;
+
+    return true;
 }
 
 /* Felszabaditja a foglalt memoriateruletet */

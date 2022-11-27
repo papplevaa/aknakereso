@@ -5,7 +5,7 @@
 #include "fajlkezeles.h"
 
 /* Jatekmod */
-typedef enum jatekmod{ UJ_JATEK, BETOLTES }jatekmod;
+enum { UJ_JATEK = 0, BETOLTES = 1 }jatekmod;
 
 int fomenu(Megjelenites *pm);
 bool uj_jatek_menu(Megjelenites *pm, Jatek *pj);

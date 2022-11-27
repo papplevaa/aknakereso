@@ -37,7 +37,10 @@ bool betoltes(Jatek *pj){
                "a:%d z:%d\n"
                 "allapot:%d\n", &verzio, &pj->szel, &pj->mag, &pj->ido, &pj->akna_db, &pj->zaszlo_db, &pj->vege);
 
-    foglal(pj);
+    bool ok;
+    ok = foglal(pj);
+    if(!ok)
+        return false;
 
     for(int y = 0; y < pj->mag; ++y){
         fgets(sor, 255, fp);

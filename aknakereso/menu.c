@@ -165,10 +165,12 @@ int fomenu(Megjelenites *pm){
         SDL_WaitEvent(&ev);
         switch(ev.type){
             case SDL_MOUSEBUTTONDOWN:
-                if(ev.button.y <= WINDOW_MAG/2)
-                    return 0;
-                else
-                    return 1;
+                if(ev.button.button == SDL_BUTTON_LEFT){
+                    if(ev.button.y <= WINDOW_MAG/2)
+                        return 0;
+                    else
+                        return 1;
+                }
                 break;
             case SDL_QUIT:
                 kilep = true;
@@ -233,7 +235,10 @@ bool uj_jatek_menu(Megjelenites *pm, Jatek *pj){
     SDL_RenderClear(pm->renderer);
 
     /* Bekert adatok alapjan memoriat foglal a palyanak, majd inicializalja azt */
-    foglal(pj);
+    bool ok;
+    ok = foglal(pj);
+    if(!ok)
+        return false;
     inicializal(pj);
 
     return true;

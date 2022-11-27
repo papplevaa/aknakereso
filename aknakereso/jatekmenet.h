@@ -7,7 +7,7 @@
 #include<time.h>
 
 /* Jatekallas */
-typedef enum jatekallas{ VESZTETT, JATEKBAN, NYERT }jatekallas;
+typedef enum jatekallas{ VESZTETT = 0, JATEKBAN = 1, NYERT = 2 }jatekallas;
 enum {AKNA_ARANY = 10};
 
 /* Egy cella adatait tartalmazo adatszerkezet*/
@@ -30,7 +30,7 @@ typedef struct Jatek{
     int vege;
 }Jatek;
 
-void foglal(Jatek *pj);
+bool foglal(Jatek *pj);
 void inicializal(Jatek *pj);
 void felszabadit(Jatek *pj);
 void felderit_seged(Jatek *pj, int x, int y);
