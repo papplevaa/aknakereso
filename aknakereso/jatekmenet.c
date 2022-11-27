@@ -2,37 +2,38 @@
 
 #include "debugmalloc.h"
 
-/* Lepes szabalyossagat ellenorzi */
-static bool szabalyos(Jatek *pj, int x, int y){
-    return !(x < 0 || x >= pj->szel || y < 0 || y >= pj->mag);
-}
-
 /* Memoriat foglal a jatekmenethez (Jatek struct) */
 void foglal(Jatek *pj){
-    // pointertombnek memoriafoglalas
+    /* Pointertombnek memoriafoglalas */
     pj->palya = (Cella**) malloc(pj->mag * sizeof(Cella*));
     if(pj->palya == NULL)
         exit(1);
 
-    // a pointertomb elso cimere mag * szel meretu 1D tombnek memoriafoglalas
+    /* A pointertomb elso cimere mag * szel meretu 1D tombnek memoriafoglalas */
     pj->palya[0] = (Cella*) malloc(pj->mag * pj->szel * sizeof(Cella));
     if(pj->palya[0] == NULL)
         exit(2);
 
-    // pointertomb inicializalasa uj "sorokhoz" merten
+    /* Pointertomb inicializalasa uj "sorokhoz" merten */
     for(int y = 1; y < pj->mag; ++y)
         pj->palya[y] = pj->palya[0] + y * pj->szel;
 }
 
+/* Felszabaditja a foglalt memoriateruletet */
 void felszabadit(Jatek *pj){
     free(pj->palya[0]);
     free(pj->palya);
     pj->palya = NULL;
 }
 
-/* A palyat inicializalja, minden cella kezodertek 0, aknak random valasztasa, cellaertek kiszamitasa */
+/* Lepes szabalyossagat ellenorzi */
+static bool szabalyos(Jatek *pj, int x, int y){
+    return !(x < 0 || x >= pj->szel || y < 0 || y >= pj->mag);
+}
+
+/* A palyat inicializalja */
 void inicializal(Jatek *pj){
-    // kezdoertekek 0-ra allitasa
+    /* Kezdoertekek 0-ra allitasa */
     pj->ido = 0;
     pj->zaszlo_db = 0;
     pj->vege = JATEKBAN;
@@ -45,7 +46,7 @@ void inicializal(Jatek *pj){
         }
     }
 
-    // aknak elhelyezese
+    /* Aknak elhelyezese */
     srand(time(0));
     int i = 0;
     while(i < pj->akna_db){
@@ -75,20 +76,20 @@ void inicializal(Jatek *pj){
 }
 
 /* Automatikus felderites */
-// A felderites hajtoereje, rekurziot hasznal a palya bejarasahoz
+/* A felderites hajtoereje, rekurziot hasznal a palya bejarasahoz */
 void felderit_seged(Jatek *pj, int x, int y){
     if(szabalyos(pj, x, y)){
-        // rekurzio feltetele: cella erteke 0 es nem lathato -> nezzuk meg a szomszedos cellakat is
+        /* Rekurzio feltetele: cella erteke 0 es nem lathato -> nezzuk meg a szomszedos cellakat is */
         if(pj->palya[y][x].ertek == 0 && !pj->palya[y][x].lathato){
-            // legyen lathato, hisz felderitunk
+            /* Legyen lathato, hisz felderitunk */
             pj->palya[y][x].lathato = true;
-            // ha jelolt volt eddig, akkor ne legyen
-            // ennek megfeleloen a zaszlo_db szamlalot is csokketnjuk
+            /* Ha jelolt volt eddig, akkor ne legyen */
+            /* Ennek megfeleloen a zaszlo_db szamlalot is csokketnjuk */
             if(pj->palya[y][x].jelolt){
                 pj->palya[y][x].jelolt = false;
                 pj->zaszlo_db -= 1;
             }
-            // 8 szomszedos cella felderitese
+            /* 8 szomszedos cella felderitese */
             felderit_seged(pj, x-1, y-1);
             felderit_seged(pj, x, y-1);
             felderit_seged(pj, x+1, y-1);
@@ -107,7 +108,7 @@ void felderit_seged(Jatek *pj, int x, int y){
     }
 }
 
-// Csak szabalyos es nem jelolt cellat ad oda a felderit_seged()-nek
+/* Csak szabalyos es nem jelolt cellat ad oda a felderit_seged()-nek */
 void felderit(Jatek *pj, int x, int y){
     if(szabalyos(pj, x, y) && !pj->palya[y][x].jelolt){
             felderit_seged(pj, x, y);
@@ -126,19 +127,23 @@ void jelol(Jatek *pj, int x, int y){
     }
 }
 
-/* Jatek veget ellenorzi */
+/* Jatek veget ellenorzi
+ * Visszateresi erteke
+    - 0, ha felderitett aknat talalt, azaz vege a jateknak
+    - 1, ha meg jatekban vagyunk, mert van meg felderitetlen / jeloletlen cella
+    - 2, ha megnyertuk a jatekot. */
 int vege_van(Jatek *pj){
     bool van_ures = false;
     for(int y = 0; y < pj->mag; ++y){
         for(int x = 0; x < pj->szel; ++x){
             if(pj->palya[y][x].akna && pj->palya[y][x].lathato)
-                return VESZTETT;
+                return 0;
             if((!pj->palya[y][x].akna && !pj->palya[y][x].lathato) || (pj->palya[y][x].akna && !pj->palya[y][x].jelolt))
                 van_ures = true;
         }
     }
     if(van_ures)
-        return JATEKBAN;
+        return 1;
     else
-        return NYERT;
+        return 2;
 }

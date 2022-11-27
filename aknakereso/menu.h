@@ -4,8 +4,8 @@
 #include "rajzolo.h"
 #include "fajlkezeles.h"
 
+/* Jatekmod */
 typedef enum jatekmod{ UJ_JATEK, BETOLTES }jatekmod;
-
 
 int fomenu(Megjelenites *pm);
 bool uj_jatek_menu(Megjelenites *pm, Jatek *pj);

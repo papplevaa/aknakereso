@@ -2,6 +2,7 @@
 
 #include "debugmalloc.h"
 
+/* Foprogram */
 int main(int argc, char *argv[]){
     Jatek jatek;
     Megjelenites megjelenites;
@@ -26,6 +27,5 @@ int main(int argc, char *argv[]){
     }
 
     sdl_close(&megjelenites);
-
     return 0;
 }

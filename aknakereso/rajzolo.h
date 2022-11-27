@@ -8,8 +8,10 @@
 
 #include "jatekmenet.h"
 
+/* Ablak, ikonmeret es fejlec magassag specifikacioi */
 enum { WINDOW_MAG = 640, WINDOW_SZEL = 800, MERET = 16, FEJLEC = 64};
 
+/* Textura ertelmezesehez */
 typedef enum Mezo{
     FUres, Egy, Ketto, Harom,
     Negy, Ot, Hat, Het,
@@ -17,6 +19,7 @@ typedef enum Mezo{
     Akna, PAkna
 }Mezo;
 
+/* Megjeleniteshez szukseges adatszerkezet */
 typedef struct Megjelenites{
     SDL_Window *window;
     SDL_Renderer *renderer;

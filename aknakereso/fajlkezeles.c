@@ -1,7 +1,8 @@
 #include "fajlkezeles.h"
 
+/* A jatekallapot menteseert felel, igaz erteket ad, ha sikeres volt a mentes */
 bool mentes(Jatek *pj){
-    FILE *fp = fopen("save/jatek.txt", "w");
+    FILE *fp = fopen("aknakereso.txt", "w");
     if(fp == NULL)
         return false;
 
@@ -20,8 +21,9 @@ bool mentes(Jatek *pj){
     return true;
 }
 
+/* A jatekallapot beolvasasaert felel egy aknakereso.txt fajlbol, igaz erteket ad, ha sikeres volt a beolvasas */
 bool betoltes(Jatek *pj){
-    FILE *fp = fopen("save/jatek.txt", "r");
+    FILE *fp = fopen("aknakereso.txt", "r");
     if(fp == NULL)
         return false;
 

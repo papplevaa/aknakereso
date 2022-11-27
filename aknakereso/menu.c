@@ -2,14 +2,23 @@
 
 #include "debugmalloc.h"
 
-
-
 /* Beolvas egy szoveget a billentyuzetrol.
- * A rajzolashoz hasznalt font es a megjelenito az utolso parameterek.
+ * A rajzolashoz hasznalt struktura az utolso parametere.
  * Az elso a tomb, ahova a beolvasott szoveg kerul.
  * A masodik a maximális hossz, ami beolvasható.
- * A visszateresi erteke logikai igaz, ha sikerult a beolvasas. */
-static bool input_text(char *dest, size_t hossz, SDL_Rect teglalap, SDL_Color hatter, SDL_Color szoveg, TTF_Font *font, SDL_Renderer *renderer) {
+ * A visszateresi erteke logikai igaz, ha a felhasznalo ki szeretne lepni */
+static bool input_text(char *dest, size_t hossz, Megjelenites *pm){
+    /* A szovegdoboz es a szoveg, kurzor szine */
+    SDL_Color hatter = { 0, 0, 0 };
+    SDL_Color szoveg = {255, 255, 255};
+
+    /* A szovegdoboz helye */
+    int szel = WINDOW_SZEL/2;
+    int mag = 40;
+    int kezd_x = (WINDOW_SZEL - szel)/2;
+    int kezd_y = (WINDOW_MAG - mag)/2;
+    SDL_Rect teglalap = { kezd_x, kezd_y, szel, mag };
+
     /* Ez tartalmazza az aktualis szerkesztest */
     char composition[SDL_TEXTEDITINGEVENT_TEXT_SIZE];
     composition[0] = '\0';
@@ -27,17 +36,17 @@ static bool input_text(char *dest, size_t hossz, SDL_Rect teglalap, SDL_Color ha
     SDL_StartTextInput();
     while (!kilep && !enter) {
         /* doboz kirajzolasa */
-        boxRGBA(renderer, teglalap.x, teglalap.y, teglalap.x + teglalap.w - 1, teglalap.y + teglalap.h - 1, hatter.r, hatter.g, hatter.b, 255);
-        rectangleRGBA(renderer, teglalap.x, teglalap.y, teglalap.x + teglalap.w - 1, teglalap.y + teglalap.h - 1, szoveg.r, szoveg.g, szoveg.b, 255);
+        boxRGBA(pm->renderer, teglalap.x, teglalap.y, teglalap.x + teglalap.w - 1, teglalap.y + teglalap.h - 1, hatter.r, hatter.g, hatter.b, 255);
+        rectangleRGBA(pm->renderer, teglalap.x, teglalap.y, teglalap.x + teglalap.w - 1, teglalap.y + teglalap.h - 1, szoveg.r, szoveg.g, szoveg.b, 255);
         /* szoveg kirajzolasa */
         int w;
         strcpy(textandcomposition, dest);
         strcat(textandcomposition, composition);
         if (textandcomposition[0] != '\0') {
-            SDL_Surface *felirat = TTF_RenderUTF8_Blended(font, textandcomposition, szoveg);
-            SDL_Texture *felirat_t = SDL_CreateTextureFromSurface(renderer, felirat);
+            SDL_Surface *felirat = TTF_RenderUTF8_Blended(pm->font, textandcomposition, szoveg);
+            SDL_Texture *felirat_t = SDL_CreateTextureFromSurface(pm->renderer, felirat);
             SDL_Rect cel = { teglalap.x, teglalap.y, felirat->w < maxw ? felirat->w : maxw, felirat->h < maxh ? felirat->h : maxh };
-            SDL_RenderCopy(renderer, felirat_t, NULL, &cel);
+            SDL_RenderCopy(pm->renderer, felirat_t, NULL, &cel);
             SDL_FreeSurface(felirat);
             SDL_DestroyTexture(felirat_t);
             w = cel.w;
@@ -46,10 +55,10 @@ static bool input_text(char *dest, size_t hossz, SDL_Rect teglalap, SDL_Color ha
         }
         /* kurzor kirajzolasa */
         if (w < maxw) {
-            vlineRGBA(renderer, teglalap.x + w + 2, teglalap.y + 2, teglalap.y + teglalap.h - 3, szoveg.r, szoveg.g, szoveg.b, 192);
+            vlineRGBA(pm->renderer, teglalap.x + w + 2, teglalap.y + 2, teglalap.y + teglalap.h - 3, szoveg.r, szoveg.g, szoveg.b, 192);
         }
         /* megjeleniti a képernyon az eddig rajzoltakat */
-        SDL_RenderPresent(renderer);
+        SDL_RenderPresent(pm->renderer);
 
         SDL_Event event;
         SDL_WaitEvent(&event);
@@ -113,43 +122,42 @@ static bool input_text(char *dest, size_t hossz, SDL_Rect teglalap, SDL_Color ha
     return kilep;
 }
 
+/* Az input_text felhasznalasaval addig ker be adatokat, amig helyeset nem kap
+ * Visszateresi erteke az adat, illetve -1, ha ki szeretnenk lepni a menubol */
 static int adat_beker(Megjelenites *pm, int min, int max){
-    // input_text ide ment
+    /* Ide ment az input_text fuggveny */
     char adat_str[10];
     int adat_int;
 
-    // input_text keret es kurzor szine es hatter szine
-    SDL_Color feher = {255, 255, 255}, fekete = { 0, 0, 0 };
-
-    // input_text szovegdoboza
-    int szel = WINDOW_SZEL/2;
-    int mag = 40;
-    int kezd_x = (WINDOW_SZEL - szel)/2;
-    int kezd_y = (WINDOW_MAG - mag)/2;
-    SDL_Rect text = { kezd_x, kezd_y, szel, mag };
-
+    /* Addig olvas, amig helyes erteket nem kapunk vagy a felhasznalo ki szeretne lepni */
     bool kilep = false;
-    // addig olvas, amig helyes erteket nem kap
     do{
-        kilep = input_text(adat_str, 10, text, fekete, feher, pm->font, pm->renderer);
+        kilep = input_text(adat_str, 10, pm);
         if(kilep)
             return -1;
         adat_int = atoi(adat_str);
     } while((adat_int < min) || (adat_int > max) || adat_int == 0);
 
-    // visszaadja abeolvasott erteket
+    // visszaadja a beolvasott erteket
     return adat_int;
 }
 
+/* A fomenu kirajzolasaert es menupont valasztasaert felel
+ * Visszateresi erteke
+   - 0, ha uj jatekot szeretnenk jatszani
+   - 1, ha egy regit szeretnenk betolteni
+   - -1, ha ki szeretnenk lepni */
 int fomenu(Megjelenites *pm){
+    /* Hatter, menupontok es elvalaszto vonal kirajzolasa */
     boxRGBA(pm->renderer, 0, 0, WINDOW_SZEL-1, WINDOW_MAG-1, 0x6A, 0x73, 0x7B, 0xFF);
     szoveg(pm, "Új játék", 0, 0, WINDOW_SZEL-1, WINDOW_MAG/2);
     szoveg(pm, "Betöltés", 0, WINDOW_MAG/2, WINDOW_SZEL-1, WINDOW_MAG-1);
     thickLineRGBA(pm->renderer, 0, WINDOW_MAG/2, WINDOW_SZEL-1, WINDOW_MAG/2, 3, 0xFF, 0xFF, 0xFF, 0xFF);
-
+    /* Megjelenites, majd megjelenito uritese */
     SDL_RenderPresent(pm->renderer);
     SDL_RenderClear(pm->renderer);
 
+    /* Esemenyhurok a menupont valasztasara (UJ JATEK = 0, BETOLTES = 1, KILEPES = -1)*/
     bool kilep = false;
     while(!kilep){
         SDL_Event ev;
@@ -157,9 +165,9 @@ int fomenu(Megjelenites *pm){
         switch(ev.type){
             case SDL_MOUSEBUTTONDOWN:
                 if(ev.button.y <= WINDOW_MAG/2)
-                    return UJ_JATEK;
+                    return 0;
                 else
-                    return BETOLTES;
+                    return 1;
                 break;
             case SDL_QUIT:
                 kilep = true;
@@ -169,48 +177,68 @@ int fomenu(Megjelenites *pm){
     return -1;
 }
 
+/* Uj jatek menupont valasztasa eseten kirajzolja az adatbekeresre felhasznalt menuket
+ * Parameterei a megjeleniteshez szukseges struktura es a beolvasott adatokhoz szukseges jatek struktura
+ * Visszateresi erteke logikai igaz, ha ez sikeresen megtortent, illetve, hamis, ha a felhasznalo ki szeretne lepni */
 bool uj_jatek_menu(Megjelenites *pm, Jatek *pj){
+    /* Ertekadas intervalluma es az adat valtozoja */
     int min, max, adat;
+    /* Cim kiiratasahoz szukseges */
     char str[100];
 
+    /* --- PALYA SZELESSEGENEK BEKERESE --- */
     min = 5;
     max = WINDOW_SZEL / MERET;
+    /* Hatterszin es cim kirajzolasa */
     boxRGBA(pm->renderer, 0, 0, WINDOW_SZEL-1, WINDOW_MAG-1, 0x6A, 0x73, 0x7B, 0xFF);
     sprintf(str, "Pálya szélessége (%d..%d):", min, max);
     szoveg(pm, str, 0, 0, WINDOW_SZEL-1, WINDOW_MAG-2*FEJLEC);
+    /* Adat ellenorzese */
     adat = adat_beker(pm, min, max);
     if(adat == -1)
         return false;
     pj->szel = adat;
+    /* Megjelenito uritese */
     SDL_RenderClear(pm->renderer);
 
+    /* --- PALYA MAGASSAGANAK BEKERESE --- */
     min = 5;
-    max = (WINDOW_MAG-32) / MERET;
+    max = (WINDOW_MAG-FEJLEC) / MERET;
+    /* Hatterszin es cim kirajzolasa */
     boxRGBA(pm->renderer, 0, 0, WINDOW_SZEL-1, WINDOW_MAG-1, 0x6A, 0x73, 0x7B, 0xFF);
     sprintf(str, "Pálya magassága (%d..%d):", min, max);
     szoveg(pm, str, 0, 0, WINDOW_SZEL-1, WINDOW_MAG-2*FEJLEC);
+    /* Adat ellenorzese */
     adat = adat_beker(pm, min, max);
     if(adat == -1)
         return false;
     pj->mag = adat;
+    /* Megjelenito uritese */
     SDL_RenderClear(pm->renderer);
 
+    /* --- AKNAK SZAMANAK BEKERESE --- */
     min = 1;
     max = pj->szel * pj->mag * AKNA_ARANY/100;
+    /* Hatterszin es cim kirajzolasa */
     boxRGBA(pm->renderer, 0, 0, WINDOW_SZEL-1, WINDOW_MAG-1, 0x6A, 0x73, 0x7B, 0xFF);
     sprintf(str, "Aknák száma (%d..%d):", min, max);
     szoveg(pm, str, 0, 0, WINDOW_SZEL-1, WINDOW_MAG-2*FEJLEC);
+    /* Adat ellenorzese */
     adat = adat_beker(pm, min, max);
     if(adat == -1)
         return false;
     pj->akna_db = adat;
+    /* Megjelenito uritese */
     SDL_RenderClear(pm->renderer);
 
+    /* Bekert adatok alapjan memoriat foglal a palyanak, majd inicializalja azt */
     foglal(pj);
     inicializal(pj);
+
     return true;
 }
 
+/* SDL-hez szukseges idozito */
 Uint32 idozito(Uint32 ms, void *param){
     SDL_Event ev;
     ev.type = SDL_USEREVENT;
@@ -218,24 +246,24 @@ Uint32 idozito(Uint32 ms, void *param){
     return ms;
 }
 
+/* A jatek iranyitasaert felelos */
 void jatekmenu(Megjelenites *pm, Jatek *pj){
-    //
-    bool kilep = false;
-    // palya bal felso pontja
+    /* Palya bal felso keppontja */
     int palya_x = WINDOW_SZEL/2 - (pj->szel*MERET)/2;
     int palya_y = FEJLEC + (WINDOW_MAG-FEJLEC)/2 - pj->mag*MERET/2;
-    //
+    /* A kattintas koordinataibol szamolt cellakoordinatakat tarolja */
     int x, y;
-    //
+    /* SDL idozito, 1 masodpercig var, majd SDL_USERVENT-et ad az eventlistara */
     SDL_TimerID id = SDL_AddTimer(1000, idozito, NULL);
-
-    // elso kirajzolas
+    /* Elso kirajzolas (hatter, fejlec, jatektabla) */
     boxRGBA(pm->renderer, 0, 0, WINDOW_SZEL-1, WINDOW_MAG-1, 0x6A, 0x73, 0x7B, 0xFF);
     fejlec(pm, pj);
     tabla_rajzol(pm, pj);
+    /* Jatekido novelese */
     pj->ido++;
 
-    // esemenyhurok
+    /* Esemenyhurok */
+    bool kilep = false;
     while(!kilep){
         bool felderites = false;
         bool jeloles = false;
@@ -243,24 +271,31 @@ void jatekmenu(Megjelenites *pm, Jatek *pj){
         SDL_WaitEvent(&ev);
 
         switch(ev.type){
+            /* Masodpercenkent ujrarajzolja a fejlecet es noveli a jatekidot */
             case SDL_USEREVENT:
                 fejlec(pm, pj);
                 pj->ido++;
                 break;
+            /* Ertelmezi a kattintast */
             case SDL_MOUSEBUTTONDOWN:
                 x = (ev.button.x - palya_x) / MERET;
                 y = (ev.button.y - palya_y) / MERET;
+                /* bal kattintas felderites */
                 if(ev.button.button == SDL_BUTTON_LEFT)
                     felderites = true;
+                /* jobb kattintas jeloles*/
                 else if(ev.button.button == SDL_BUTTON_RIGHT)
                     jeloles = true;
                 break;
-
+            /* Kilepes */
             case SDL_QUIT:
                 kilep = true;
                 break;
         }
 
+        /* Ha meg jatekban vagyunk, akkor meghivja
+         * a felderites es jeloles fuggvenyeket,
+         * majd kirajzolja a fejlecet es jatektablat */
         if(pj->vege == JATEKBAN){
             if(felderites)
                 felderit(pj, x, y);
@@ -270,11 +305,14 @@ void jatekmenu(Megjelenites *pm, Jatek *pj){
             fejlec(pm, pj);
             tabla_rajzol(pm, pj);
         } else {
+            /* Ha vege a jateknak toroljuk az idozitot, nincs mar ra szukseg
+             * es megegyszer kirajzoljuk a fejlecet, illetve a tablat, de mar teljesen felfedve */
             SDL_RemoveTimer(id);
             fejlec(pm, pj);
             felfed(pm, pj);
         }
 
+        /* Menti a jatekallast */
         mentes(pj);
     }
 }

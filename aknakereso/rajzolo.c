@@ -2,6 +2,7 @@
 
 #include "debugmalloc.h"
 
+/* SDL inicializalasert felel */
 void sdl_init(Megjelenites *pm) {
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
         SDL_Log("Nem indithato az SDL: %s", SDL_GetError());
@@ -36,6 +37,7 @@ void sdl_init(Megjelenites *pm) {
     pm->mezok = mezok;
 }
 
+/* SDL bezarasaert felel */
 void sdl_close(Megjelenites *pm){
     TTF_CloseFont(pm->font);
     pm->font = NULL;
@@ -52,6 +54,9 @@ void sdl_close(Megjelenites *pm){
     SDL_Quit();
 }
 
+/* Parameterkent kapott szoveget masol a megjelenitobe.
+ * Az utolso negy parameter ket pontot ad meg, melyek egy teglalap bal felso es jobb also pontjai.
+ * A szoveget ezen teglalap kozpere irjuk ki. */
 void szoveg(Megjelenites* pm, char *szoveg, int x1, int y1, int x2, int y2){
     SDL_Color feher = { 255, 255, 255 };
     SDL_Surface *felirat = TTF_RenderUTF8_Blended(pm->font, szoveg, feher);
@@ -69,12 +74,14 @@ void szoveg(Megjelenites* pm, char *szoveg, int x1, int y1, int x2, int y2){
     SDL_FreeSurface(felirat);
 }
 
+/* Egz mezot masol a megjelenitobe */
 static void mezo_rajzol(Megjelenites *pm, Mezo melyik, int x, int y) {
     SDL_Rect forras = { (melyik % 4) * MERET, (melyik / 4) * MERET, MERET, MERET };
     SDL_Rect celterulet = { x, y, MERET, MERET };
     SDL_RenderCopy(pm->renderer, pm->mezok, &forras, &celterulet);
 }
 
+/* Az egesz jatektablat kirajzolja */
 void tabla_rajzol(Megjelenites *pm, Jatek *pj){
     Mezo melyik;
     int palya_x = WINDOW_SZEL/2 - (pj->szel*MERET)/2;
@@ -101,6 +108,7 @@ void tabla_rajzol(Megjelenites *pm, Jatek *pj){
     SDL_RenderPresent(pm->renderer);
 }
 
+/* A valos jatektablat rajzolja ki, csak a jatek vegeztevel hivjuk meg */
 void felfed(Megjelenites *pm, Jatek *pj){
     Mezo melyik;
     int palya_x = WINDOW_SZEL/2 - (pj->szel*MERET)/2;
@@ -121,6 +129,7 @@ void felfed(Megjelenites *pm, Jatek *pj){
     SDL_RenderPresent(pm->renderer);
 }
 
+/* A fejlecet rajzolja ki: jatek allapota, jatekido, aknak es zaszlok szama */
 void fejlec(Megjelenites *pm, Jatek *pj){
     char ido_str[20];
     sprintf(ido_str, "%ds", pj->ido);
