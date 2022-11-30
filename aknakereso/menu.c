@@ -1,6 +1,6 @@
-#include "menu.h"
-
 #include "debugmalloc.h"
+
+#include "menu.h"
 
 /* Beolvas egy szoveget a billentyuzetrol.
  * A rajzolashoz hasznalt struktura az utolso parametere.

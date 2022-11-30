@@ -1,6 +1,6 @@
-#include "fajlkezeles.h"
-
 #include "debugmalloc.h"
+
+#include "fajlkezeles.h"
 
 /* A jatekallapot menteseert felel, igaz erteket ad, ha sikeres volt a mentes */
 bool mentes(Jatek *pj){
@@ -10,7 +10,7 @@ bool mentes(Jatek *pj){
 
     fprintf(fp, "Aknakereso v1\n"
                 "%dx%d\n"
-                "%d"
+                "%d\n"
                 "a:%d z:%d\n"
                 "allapot:%d\n\n", pj->szel, pj->mag, pj->ido, pj->akna_db, pj->zaszlo_db, pj->vege);
 

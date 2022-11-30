@@ -486,3 +486,105 @@
 1669483440 c:\users\levi\desktop\aknakereso-main\aknakereso\fajlkezeles.h
 	"jatekmenet.h"
 
+1669528034 source:c:\users\levente\desktop\aknakereso-main\aknakereso-main\aknakereso\aknakereso.c
+	"menu.h"
+	"debugmalloc.h"
+
+1669528034 c:\users\levente\desktop\aknakereso-main\aknakereso-main\aknakereso\menu.h
+	"rajzolo.h"
+	"fajlkezeles.h"
+
+1669528034 c:\users\levente\desktop\aknakereso-main\aknakereso-main\aknakereso\rajzolo.h
+	<SDL.h>
+	<SDL_image.h>
+	<SDL2_gfxPrimitives.h>
+	<SDL_ttf.h>
+	"jatekmenet.h"
+
+1669528034 c:\users\levente\desktop\aknakereso-main\aknakereso-main\aknakereso\jatekmenet.h
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	<time.h>
+
+1669528034 c:\users\levente\desktop\aknakereso-main\aknakereso-main\aknakereso\fajlkezeles.h
+	"jatekmenet.h"
+
+1669528034 c:\users\levente\desktop\aknakereso-main\aknakereso-main\aknakereso\debugmalloc.h
+	<stdbool.h>
+	<stddef.h>
+	<stdlib.h>
+	<stdio.h>
+	<ctype.h>
+	<string.h>
+	<stdarg.h>
+	<process.h>
+	<unistd.h>
+
+1669528034 source:c:\users\levente\desktop\aknakereso-main\aknakereso-main\aknakereso\fajlkezeles.c
+	"fajlkezeles.h"
+	"debugmalloc.h"
+
+1669528034 source:c:\users\levente\desktop\aknakereso-main\aknakereso-main\aknakereso\jatekmenet.c
+	"jatekmenet.h"
+	"debugmalloc.h"
+
+1669528034 source:c:\users\levente\desktop\aknakereso-main\aknakereso-main\aknakereso\menu.c
+	"menu.h"
+	"debugmalloc.h"
+
+1669528034 source:c:\users\levente\desktop\aknakereso-main\aknakereso-main\aknakereso\rajzolo.c
+	"rajzolo.h"
+	"debugmalloc.h"
+
+1669580874 source:c:\users\levente\desktop\proba\aknakereso-main\aknakereso\aknakereso.c
+	"debugmalloc.h"
+	"menu.h"
+
+1669528034 c:\users\levente\desktop\proba\aknakereso-main\aknakereso\debugmalloc.h
+	<stdbool.h>
+	<stddef.h>
+	<stdlib.h>
+	<stdio.h>
+	<ctype.h>
+	<string.h>
+	<stdarg.h>
+	<process.h>
+	<unistd.h>
+
+1669528034 c:\users\levente\desktop\proba\aknakereso-main\aknakereso\menu.h
+	"rajzolo.h"
+	"fajlkezeles.h"
+
+1669528034 c:\users\levente\desktop\proba\aknakereso-main\aknakereso\rajzolo.h
+	<SDL.h>
+	<SDL_image.h>
+	<SDL2_gfxPrimitives.h>
+	<SDL_ttf.h>
+	"jatekmenet.h"
+
+1669581090 c:\users\levente\desktop\proba\aknakereso-main\aknakereso\jatekmenet.h
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	<time.h>
+
+1669528034 c:\users\levente\desktop\proba\aknakereso-main\aknakereso\fajlkezeles.h
+	"jatekmenet.h"
+
+1669581262 source:c:\users\levente\desktop\proba\aknakereso-main\aknakereso\fajlkezeles.c
+	"debugmalloc.h"
+	"fajlkezeles.h"
+
+1669580882 source:c:\users\levente\desktop\proba\aknakereso-main\aknakereso\jatekmenet.c
+	"debugmalloc.h"
+	"jatekmenet.h"
+
+1669580894 source:c:\users\levente\desktop\proba\aknakereso-main\aknakereso\menu.c
+	"debugmalloc.h"
+	"menu.h"
+
+1669580888 source:c:\users\levente\desktop\proba\aknakereso-main\aknakereso\rajzolo.c
+	"debugmalloc.h"
+	"rajzolo.h"
+

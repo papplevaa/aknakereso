@@ -1,6 +1,6 @@
-#include"rajzolo.h"
-
 #include "debugmalloc.h"
+
+#include"rajzolo.h"
 
 /* SDL inicializalasert felel */
 void sdl_init(Megjelenites *pm) {

@@ -1,6 +1,6 @@
-#include "jatekmenet.h"
-
 #include "debugmalloc.h"
+
+#include "jatekmenet.h"
 
 /* Memoriat foglal a jatekmenethez (Jatek struct) */
 bool foglal(Jatek *pj){

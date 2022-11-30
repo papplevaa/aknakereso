@@ -2,9 +2,9 @@
  * Keszitette: Papp Levente, HV0CRH
  * 2022. 11. 27. */
 
-#include "menu.h"
-
 #include "debugmalloc.h"
+
+#include "menu.h"
 
 /* Foprogram */
 int main(int argc, char *argv[]){
